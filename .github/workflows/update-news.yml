@@ -1,0 +1,27 @@
+name: Update Latest News
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Jalankan setiap hari pada tengah malam
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+      - name: Run news scraper
+        run: python script.py
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add latest_news.json
+          git commit -m "Update latest news"
+          git push
